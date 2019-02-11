@@ -26,6 +26,21 @@
 
 <body>
 
+  <h1 style="color:green;"> Jinja Test : {{Title}} , {{mu}} </h1>
+
+  <pre>
+
+    {{ "<strong>Strong</strong>" | safe}}
+    {{ "<strong>Strong</strong>" | striptags}}
+
+    {% raw %}
+    {% if True  %}
+          TTT
+    {% endif %}
+    {% endraw %}
+
+  </pre>
+
   <!-- Navbar -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
     <div class="container">
@@ -47,13 +62,13 @@
         <!-- Left -->
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#dailyList" target="_blank">Top 100</a>
+            <a class="nav-link" href="#dailyList" target="_self">Top 100</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://mdbootstrap.com/docs/jquery/getting-started/download/" target="_blank">Album</a>
+            <a class="nav-link" href="https://mdbootstrap.com/docs/jquery/getting-started/download/" target="_self">Album</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://mdbootstrap.com/education/bootstrap/" target="_blank">Artist</a>
+            <a class="nav-link" href="https://mdbootstrap.com/education/bootstrap/" target="_self">Artist</a>
           </li>
         </ul>
 
