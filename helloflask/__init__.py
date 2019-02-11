@@ -1,10 +1,22 @@
-from flask import Flask, g,  Response, make_response
-
+# import sys; 
+# print( sys.path)
+from flask import Flask, g,  Response, make_response, request
+from datetime import datetime, date
 
 
 app = Flask(__name__)
 app.debug = True
 
+
+def ymd(fmt):
+    def trans(date_str):
+        return datetime.strptime(date_str, fmt)
+    return trans
+
+@app.route('/dt')
+def dt():
+    datestr = request.values.get('date', date.today(), type=ymd('%Y-%m-%d'))
+    return "우리나라 시간 형식: " + str(datestr)
 
 @app.route('/test/<tid>')
 def test3(tid):
@@ -30,12 +42,12 @@ def res1():
 # @app.before_request
 # def before_request():
 #     print("before_request!!!")
-#     g.str = "한글"
+
 
 @app.route("/gg")
 def helloworld():
     return "Hello World!" + getattr(g, 'str', '111')
 
-# @app.route("/")
-# def helloworld():
-#     return "Hello Flask World!!!!!"
+@app.route("/")
+def helloworld():
+    return "Hello Flask World!!!!!"
