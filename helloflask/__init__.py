@@ -12,14 +12,44 @@ app.config.update(
 	PERMANENT_SESSION_LIFETIME=timedelta(31)      # 31 days
 )
 
+@app.route('/recursive')
+def recursive():	
+
+    
+    py = ("파이썬","https://search.naver.com",[])
+    java = ("자바","https://search.naver.com",[])
+    prg =("프로그래밍 언어","https://search.naver.com", [py, java])
+    jinja = ("Jinja","https://search.naver.com",[])
+    gc = ("Genshi, Cheetah","https://search.naver.com",[])
+    flask = ("플라스크","https://search.naver.com",[jinja, gc])
+    spr = ("스프링","https://search.naver.com",[])
+    ndjs = ("노드JS","https://search.naver.com",[])
+    webf = ("웹 프레임워크","https://search.naver.com",[flask,spr,ndjs])
+    my = ("나의 일상","https://search.naver.com",[])
+    issue = ("이슈 게시판","https://search.naver.com",[])
+    others = ("기타","https://search.naver.com",[my, issue])
+
+    return render_template("application.html", navis=[prg, webf, others])
+
+
+@app.route('/tmpl2')
+def t2():
+    a = (1, "만남1", "김건모", False, [])
+    b = (2, "만남2", "노사연", True, [a])
+    c = (3, "만남3", "익명", False, [a,b])
+    d = (4, "만남4", "익명", False, [a,b,c])
+
+    return render_template("application.html", lst2=[a,b,c,d])
+
+
 @app.route('/tmpl')
 def t():
     title = Markup("<strong>title</strong>")
     mu = Markup("<h1>iii = <i>%s</i></h1>")
     h = mu % "Italic"
-    print("h=", h)
+    lst = [ ("만남1", "김건모",False), ("만남2", "노사연",True), ("만남3", "김건삼",False), ("만남4", "노사사",True) ]
 
-    return render_template('application.html', Title=title, mu=h)
+    return render_template('application.html', Title=title, mu=h, lst=lst)
 
 
 @app.route('/setsession')
