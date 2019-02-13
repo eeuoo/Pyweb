@@ -12,25 +12,37 @@ app.config.update(
 	PERMANENT_SESSION_LIFETIME=timedelta(31)      # 31 days
 )
 
+@app.route('/ttmacro')
+def ttmacro():
+    return render_template("application.html")
+
+class Navi:
+    def __init__(self, title, url='#', ref=[]):
+        self.title = title
+        self.url = url
+        self.ref = ref
+
 @app.route('/recursive')
 def recursive():	
 
-    
-    py = ("파이썬","https://search.naver.com",[])
-    java = ("자바","https://search.naver.com",[])
-    prg =("프로그래밍 언어","https://search.naver.com", [py, java])
-    jinja = ("Jinja","https://search.naver.com",[])
-    gc = ("Genshi, Cheetah","https://search.naver.com",[])
-    flask = ("플라스크","https://search.naver.com",[jinja, gc])
-    spr = ("스프링","https://search.naver.com",[])
-    ndjs = ("노드JS","https://search.naver.com",[])
-    webf = ("웹 프레임워크","https://search.naver.com",[flask,spr,ndjs])
-    my = ("나의 일상","https://search.naver.com",[])
-    issue = ("이슈 게시판","https://search.naver.com",[])
-    others = ("기타","https://search.naver.com",[my, issue])
+    py = Navi("파이썬","https://search.naver.com",[])
+    java = Navi("자바","https://search.naver.com",[])
+    prg =Navi("프로그래밍 언어","https://search.naver.com", [py, java])
+    jinja = Navi("Jinja","https://search.naver.com",[])
+    gc = Navi("Genshi, Cheetah","https://search.naver.com",[])
+    flask = Navi("플라스크","https://search.naver.com",[jinja, gc])
+    spr = Navi("스프링","https://search.naver.com",[])
+    ndjs = Navi("노드JS","https://search.naver.com",[])
+    webf = Navi("웹 프레임워크","https://search.naver.com",[flask,spr,ndjs])
+    my = Navi("나의 일상","https://search.naver.com",[])
+    issue = Navi("이슈 게시판","https://search.naver.com",[])
+    others = Navi("기타","https://search.naver.com",[my, issue])
 
     return render_template("application.html", navis=[prg, webf, others])
 
+@app.route('/meltop100')
+def meltop():
+    return render_template("meltop100.html")
 
 @app.route('/tmpl2')
 def t2():

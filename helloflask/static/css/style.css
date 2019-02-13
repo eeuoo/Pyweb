@@ -4,6 +4,10 @@ body,
 .view {
   height: 100%; }
 
+body {
+  margin-top: 60px;
+}
+
 /* Full Page Carousel itself*/
 .carousel {
   height: 100%; }

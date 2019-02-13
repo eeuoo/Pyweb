@@ -1,41 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
+{% import "macro/tests.html" as cm with context %}
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Flask Practice</title>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
-  <!-- Bootstrap core CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
-  <link href="css/mdb.min.css" rel="stylesheet">
-  <!-- Your custom styles (optional) -->
-  <link href="css/style.min.css" rel="stylesheet">
-  <style type="text/css">
-    @media (min-width: 800px) and (max-width: 850px) {
-      .navbar:not(.top-nav-collapse) {
-        background: #1C2331 !important;
-      }
-    }
-    .aaa { color : red;}
-    .bbb { color : blue;}
+<!-- Try This-->
+{% block trythis %}
+{% endblock trythis %}
 
-  </style>
-</head>
+<!-- macro Test-->
+{% block macrotest %}
 
-<body>
+    <p>{{ttt}}{{ cm.test_macro1('TTTTTTTT1122333') }}</p>
+    <p>{{ cm.test_macro1('QQQQQQQQQQQ') }}</p>
 
+    {% call(x) cm.test_macro2('Hong', 'bbb') %}
+        <p>This is app.html.call block: <strong>{{x}}</strong></p>
+    {% endcall %}
+
+{% endblock macrotest%}
+
+<!-- main-->
+{% block main %}
   <h1 style="color:green;"> Flask Test {{Title}} {{mu}} </h1>
 
   <hr>
+  <ul>
+    {% for rank, title, name, hide, ref in lst2 recursive %}
+    <li>
+        {{loop.index}} - <small>{{title}}</small>: {{name}}
+        {%- if ref -%}
+            {% set outer_loop = loop %}
+            {% for ref_song in ref %}
+                <p>{{outer_loop.index}} - {{loop.index}} : {{ ref_song[1] }}</p>
+            {% endfor %}
+        {%- endif %}
+    </li>
+    {% endfor %}
+  </ul>
+
+
+  <hr>
     <ul>
-      {% for title, link, ref in navis recursive %}
+      {% for nav in navis recursive %}
           <li>
-              <a href={{link}} >{{title}}</a>
-              <ul>{{ loop(ref) }}</ul>
+              <a href={{nav.url | e}} >{{nav.title}}{{loop.depth}}</a>
+              <ul class="{% if (loop.depth == 1) %}font-sm{% endif %}"> {{loop(nav.ref)}} </ul>
           </li>
       {% endfor %}
     </ul>
@@ -78,6 +85,4 @@
 
   </pre>
 
-</body>
-
-</html>
+{% endblock main %}
