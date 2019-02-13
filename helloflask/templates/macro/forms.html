@@ -1,0 +1,54 @@
+{% macro input(type='text', id='', name='', value='', class='') -%}
+
+<!-- Input -->
+<input type="{{type}}" 
+    {% if id %}id="{{id}}"{% endif %}
+    name="{{name}}"
+    value="{{value}}"
+    class="form-control {{class}}" />
+{%- endmacro %}
+
+<!-- Radio -->
+{% macro radio(id, name, value='', text='', checked='', class='') -%}
+    <div class="custom-control custom-radio">
+        <input class="custom-control-input {{class}}" type="radio"
+               name="{{name}}"
+               id="{{id}}"
+               value="{{value}}"
+               {{checked}}>
+        <label class="custom-control-label" for="{{id}}">
+            {{text}}
+        </label>
+    </div>
+{%- endmacro %}
+
+<!-- Radios -->
+{% macro radios(lst, class='') -%}
+    <div class="form-group">
+        {% for r in lst %}
+            {{radio(r.id, r.name, r.value, r.text, r.checked)}}
+        {% endfor %}
+    </div>
+{%- endmacro %}
+
+
+<!-- Options -->
+{% macro options(value, text='') %}
+
+    <option value="{{value}}">{{text}}</option>
+
+{%- endmacro %}
+
+<!-- Select -->
+{% macro select(optionList, class='') %}
+    <div class="form-group">
+        <select class="custom-select {{class}}">
+            <option selected>Open this select menu</option>
+            {% for o in optionList %}
+                {{options(o.value, o.text)}}
+            {% endfor%}
+        </select>
+    </div>
+{%- endmacro %}
+
+<!-- Modal -->

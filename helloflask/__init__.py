@@ -12,6 +12,47 @@ app.config.update(
 	PERMANENT_SESSION_LIFETIME=timedelta(31)      # 31 days
 )
 
+class Options:
+    def __init__(self, value, text=''):
+        self.value = value
+        self.text = text
+
+
+@app.route('/tryselect')
+def tryselect():
+    optionList = []
+    for i in [1,2,3]:
+        value = i
+        text = 'selectTest' + str(i)
+        optionList.append(Options( value, text))
+
+    return render_template('application.html', optionList=optionList)
+
+
+class FormInput:
+    def __init__(self, id='', name='', value='', checked='', text='', type='text'):
+        self.id = id
+        self.name = name
+        self.value = value
+        self.checked = checked
+        self.text = text
+        self.type = type
+
+@app.route('/macrotrythis')
+def idx():
+    rds = []
+    for i in [1,2,3]:
+        id = 'r' + str(i)
+        name = 'radiotest'
+        value = i
+        checked = ''
+        if i == 2:
+            checked = 'checked'
+        text = 'RadioTest' + str(i)
+        rds.append( FormInput(id, name, value, checked, text) )
+
+    return render_template('application.html', ttt='TestTTT999', radioList=rds)
+
 @app.route('/ttmacro')
 def ttmacro():
     return render_template("application.html")

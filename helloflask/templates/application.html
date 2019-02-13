@@ -1,8 +1,21 @@
 {% extends "layout.html" %}
 {% import "macro/tests.html" as cm with context %}
+{% from "macro/forms.html" import input, radio, radios, select, options %}
 
 <!-- Try This-->
 {% block trythis %}
+
+  <form class="container">
+    <div class="form-group">
+        {{radio('r1', 'rdo', 'val1', 'Value1')}}
+        {{radio('r2', 'rdo', 'val2', 'Value2', "checked")}}
+        {{radio('r3', 'rdo', 'val3', 'Value3')}}
+    </div>
+
+    {{radios(radioList)}}
+
+    {{select(optionList)}}  
+
 {% endblock trythis %}
 
 <!-- macro Test-->
