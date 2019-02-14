@@ -1,8 +1,20 @@
 # import sys; 
 # print( sys.path)
 from flask import Flask, g,  Response, make_response, request
-from flask import Markup, session, render_template
+from flask import Markup, session, render_template, url_for
 from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
+import os
+
+class MonthList:
+    def __init__(self, dayday):
+        day = "2019-"+ dayday + "-1"
+        d = datetime.strptime(day, "%Y-%m-%d")
+        self.startdt = (d.weekday() * -1) +1
+        nextMonth = d + relativedelta(months=1)
+        self.month = d.month
+        self.enddt = (nextMonth - timedelta(1)).day +1
+
 
 app = Flask(__name__)
 app.debug = True
@@ -11,6 +23,53 @@ app.config.update(
 	SESSION_COOKIE_NAME='pyweb_flask_session',
 	PERMANENT_SESSION_LIFETIME=timedelta(31)      # 31 days
 )
+
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
+
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                     endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+
+    return url_for(endpoint, **values)
+
+
+@app.route('/year')
+def oneyear():
+    d = datetime.strptime("2019-03-01", "%Y-%m-%d")
+    startdt = (d.weekday() * -1) +1
+    nextMonth = d + relativedelta(months=1)
+    mm = d.month
+    enddt = (nextMonth - timedelta(1)).day +1
+
+    today = '2019-02-14 09:22'
+
+    return render_template('application.html', startdt=startdt, monthis=mm, enddt=enddt, today=today)
+
+@app.template_filter('ymd')               # cf. Handlebars' helper
+def datetime_ymd(dt, fmt='%m-%d'):
+    if isinstance(dt, date):
+        return "<strong>%s</strong>" % dt.strftime(fmt)
+    else:
+        return dt
+
+@app.template_filter('simpledate')
+def simpledate(dt):
+    if not isinstance(dt, date):
+        dt = datetime.strptime(dt, '%Y-%m-%d %H:%M')
+
+    if (datetime.now() - dt).days < 1:
+        fmt = "%H:%M"
+    else:
+        fmt = "%m/%d"
+
+    return "<strong>%s</strong>" % dt.strftime(fmt)
+    
 
 class Options:
     def __init__(self, value, text=''):
@@ -26,7 +85,11 @@ def tryselect():
         text = 'selectTest' + str(i)
         optionList.append(Options( value, text))
 
-    return render_template('application.html', optionList=optionList)
+    yesterday = "2019-02-13 15:22"
+    today = "2019-02-14 13:24"
+    tomorrow = "2019-02-15 11:11"
+
+    return render_template('application.html', optionList=optionList, todayis=today, tomorrow=tomorrow, yesterday=yesterday)
 
 
 class FormInput:

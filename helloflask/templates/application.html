@@ -1,9 +1,18 @@
 {% extends "layout.html" %}
 {% import "macro/tests.html" as cm with context %}
-{% from "macro/forms.html" import input, radio, radios, select, options %}
+{% from "macro/forms.html" import input, radio, radios, select, options, modal, calendar %}
+
 
 <!-- Try This-->
 {% block trythis %}
+
+  {{calendar(monthList)}}
+
+  <hr>
+
+  <p> 오늘 {{today | simpledate | safe}}</p>
+  
+  <hr>
 
   <form class="container">
     <div class="form-group">
@@ -13,8 +22,10 @@
     </div>
 
     {{radios(radioList)}}
-
-    {{select(optionList)}}  
+    <hr>
+    {{select(optionList)}}
+    <hr>
+  </form>
 
 {% endblock trythis %}
 
@@ -27,6 +38,12 @@
     {% call(x) cm.test_macro2('Hong', 'bbb') %}
         <p>This is app.html.call block: <strong>{{x}}</strong></p>
     {% endcall %}
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#momo1"> 모달 테스트 </button> 
+    
+    {% call modal('테스트 모달', 'momo1') %}
+        <h3>Modal body</h3>
+    {% endcall %} 
 
 {% endblock macrotest%}
 
