@@ -5,77 +5,29 @@ from flask import Markup, session, render_template, url_for
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 import os
+from helloflask.utils.app import app
+from helloflask.utils.classes import Options
 
-class MonthList:
-    def __init__(self, dayday):
-        day = "2019-"+ dayday + "-1"
+
+class Months:
+    def __init__(self, year, dayday):
+        day = str(year)+"-" + str(dayday) + "-1"
         d = datetime.strptime(day, "%Y-%m-%d")
         self.startdt = (d.weekday() * -1) +1
         nextMonth = d + relativedelta(months=1)
         self.month = d.month
         self.enddt = (nextMonth - timedelta(1)).day +1
 
-
-app = Flask(__name__)
-app.debug = True
-app.config.update(
-	SECRET_KEY='X1243yRH!mMwf',
-	SESSION_COOKIE_NAME='pyweb_flask_session',
-	PERMANENT_SESSION_LIFETIME=timedelta(31)      # 31 days
-)
-
-@app.context_processor
-def override_url_for():
-    return dict(url_for=dated_url_for)
-
-def dated_url_for(endpoint, **values):
-    if endpoint == 'static':
-        filename = values.get('filename', None)
-        if filename:
-            file_path = os.path.join(app.root_path,
-                                     endpoint, filename)
-            values['q'] = int(os.stat(file_path).st_mtime)
-
-    return url_for(endpoint, **values)
-
-
-@app.route('/year')
-def oneyear():
-    d = datetime.strptime("2019-03-01", "%Y-%m-%d")
-    startdt = (d.weekday() * -1) +1
-    nextMonth = d + relativedelta(months=1)
-    mm = d.month
-    enddt = (nextMonth - timedelta(1)).day +1
-
+@app.route('/ayear')
+def ayear():
+    monthlist = []
     today = '2019-02-14 09:22'
+    year = datetime.today().year
 
-    return render_template('application.html', startdt=startdt, monthis=mm, enddt=enddt, today=today)
+    for m in range(1,13):
+        monthlist.append(Months(year, m))
 
-@app.template_filter('ymd')               # cf. Handlebars' helper
-def datetime_ymd(dt, fmt='%m-%d'):
-    if isinstance(dt, date):
-        return "<strong>%s</strong>" % dt.strftime(fmt)
-    else:
-        return dt
-
-@app.template_filter('simpledate')
-def simpledate(dt):
-    if not isinstance(dt, date):
-        dt = datetime.strptime(dt, '%Y-%m-%d %H:%M')
-
-    if (datetime.now() - dt).days < 1:
-        fmt = "%H:%M"
-    else:
-        fmt = "%m/%d"
-
-    return "<strong>%s</strong>" % dt.strftime(fmt)
-    
-
-class Options:
-    def __init__(self, value, text=''):
-        self.value = value
-        self.text = text
-
+    return render_template('application.html', year=year, today=today, monthList=monthlist)
 
 @app.route('/tryselect')
 def tryselect():
@@ -90,16 +42,6 @@ def tryselect():
     tomorrow = "2019-02-15 11:11"
 
     return render_template('application.html', optionList=optionList, todayis=today, tomorrow=tomorrow, yesterday=yesterday)
-
-
-class FormInput:
-    def __init__(self, id='', name='', value='', checked='', text='', type='text'):
-        self.id = id
-        self.name = name
-        self.value = value
-        self.checked = checked
-        self.text = text
-        self.type = type
 
 @app.route('/macrotrythis')
 def idx():
@@ -120,15 +62,9 @@ def idx():
 def ttmacro():
     return render_template("application.html")
 
-class Navi:
-    def __init__(self, title, url='#', ref=[]):
-        self.title = title
-        self.url = url
-        self.ref = ref
 
 @app.route('/recursive')
 def recursive():	
-
     py = Navi("파이썬","https://search.naver.com",[])
     java = Navi("자바","https://search.naver.com",[])
     prg =Navi("프로그래밍 언어","https://search.naver.com", [py, java])
@@ -156,7 +92,6 @@ def t2():
     d = (4, "만남4", "익명", False, [a,b,c])
 
     return render_template("application.html", lst2=[a,b,c,d])
-
 
 @app.route('/tmpl')
 def t():

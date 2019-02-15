@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% import "macro/tests.html" as cm with context %}
-{% from "macro/forms.html" import input, radio, radios, select, options, modal, calendar %}
+{% from "macro/forms.html" import input, radio, radios, select, options, modal, calendar, calendar3 %}
 
 
 <!-- Try This-->
 {% block trythis %}
-
-  {{calendar(monthList)}}
+  
+  {{calendar3(monthList, year)}}
 
   <hr>
 

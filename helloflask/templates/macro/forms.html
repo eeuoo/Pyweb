@@ -84,12 +84,12 @@
 {% macro calendar(monthList) %}
 
     {% for m in monthList %}
-        <table>
-            <h3>{{m.month}}월</h3>
+        <table class="table table-bordered container text-center" style="width : 25rem;">
+            <h3 class="text-center">{{m.month}}월</h3>
             <thead>
             <tr>
                  {% for w in '월화수목금토일'%}
-                <th>{{w}}</th>
+                <th><strong>{{w}}</strong></th>
                 {% endfor -%}
             </tr>
             </thead>
@@ -107,7 +107,49 @@
             {% endfor %}
             </tbody>
         </table>
-        <hr>
+        
+    {% endfor %}
+
+{% endmacro %}
+
+{% macro calendar3(monthList, year) %}
+
+    <h1 class="text-center text-danger">
+        <small><a href="/ayear?year={{year - 1}}" class="text-muted">{{year - 1}}</a></small>
+        {{year}}년
+        <small><a href="/ayear?year={{year + 1}}" class="text-muted">{{year + 1}}</a></small>
+    </h1>
+
+    {% for mm in monthList | batch(3) %}
+        <div class="row">
+        {% for m in mm %}
+            <div class="col-4">
+            <table class="table table-bordered text-center">
+                <h3 class="text-center">{{m.month}}월</h3>
+                <thead>
+                <tr>
+                    {% for w in '월화수목금토일'%}
+                    <th><strong>{{w}}</strong></th>
+                    {% endfor -%}
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in range(m.startdt, m.enddt) | batch(7, '&nbsp;') %}
+                <tr>
+                    {% for col in row  %}
+                    <td>
+                        {% if ((col | int) >= 1) %}
+                        {{col |  safe}}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        {% endfor %}
+        </div>
     {% endfor %}
 
 {% endmacro %}

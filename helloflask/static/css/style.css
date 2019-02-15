@@ -16,6 +16,11 @@ tr > :last-child {
   color: red;
 }
 
+table > thead {
+  background-color: rgba(145, 36, 240, 0.3);
+  opacity:0.6;
+}
+
 /* Full Page Carousel itself*/
 .carousel {
   height: 100%; }
