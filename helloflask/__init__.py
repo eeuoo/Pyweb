@@ -7,6 +7,7 @@ from helloflask.init_db import init_database, db_session
 app = Flask(__name__)
 import helloflask.views
 import helloflask.filters
+import helloflask.tests
 
 
 app.debug = True
@@ -24,8 +25,7 @@ def dated_url_for(endpoint, **values):
     if endpoint == 'static':
         filename = values.get('filename', None)
         if filename:
-            file_path = os.path.join(app.root_path,
-                                     endpoint, filename)
+            file_path = os.path.join(app.root_path, endpoint, filename)
             values['q'] = int(os.stat(file_path).st_mtime)
 
     return url_for(endpoint, **values)

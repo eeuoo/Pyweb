@@ -4,9 +4,75 @@ from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 import os
 from helloflask import app
-from helloflask.utils.classes import Options, FormInput, Navi, Months
-from helloflask.utils.utils import ymd
+from helloflask.classes import Options, FormInput, Navi, Months
+from helloflask.utils import ymd
 
+from helloflask.init_db import db_session
+from helloflask.models import User, AlbumInfo, SongInfo
+from sqlalchemy.exc import SQLAlchemyError
+from collections import namedtuple
+from sqlalchemy.orm import subqueryload, joinedload
+
+
+
+
+@app.route('/sql2')
+def sql2():
+    try : 
+     ret = db_session.query(SongInfo).options(joinedload(SongInfo.album)).filter(SongInfo.likecnt < 10000)
+    except SQLAlchemyError as sqlerr:
+        db_session.rollback()
+        print("SqlError>>", sqlerr)
+
+    except:
+        print("Error!!")
+
+    finally : db_session.close()
+
+    return render_template('main.html', ret=ret)
+
+@app.route('/sql')
+def idx():
+    ret = 'OK'
+    try:
+        # Create(insert)
+        u = User('abc@efg.com', 'hong')
+        db_session.add(u)
+        print("user.id=", u.id)
+        
+        # Read(select)1
+        # u = User.query.filter(User.id == 1).first()
+        # lst = User.query.all()
+
+        # Read(select)2
+        # s = db_session()
+        # result = s.execute('select id, email, nickname from User where id > :id', {'id':1})
+        # Record = namedtuple("User", result.keys())
+        # rrr = result.fetchall()
+        # print(">>", type(result), result.keys(), rrr)
+        # records = [Record(*r) for r in rrr]
+
+        # for r in records:
+        #     print(r, r.nickname, type(r))
+
+        # s.close()
+
+        db_session.commit()
+
+        # ret = User.query.all()
+        
+    except SQLAlchemyError as sqlerr:
+        db_session.rollback()
+        print("SqlError>>", sqlerr)
+
+    except:
+        print("Error!!")
+
+    finally:
+        db_session.close()
+
+    # return "RET=" + str(ret)
+    return render_template('main.html', userlist=ret)
 
 @app.route('/ayear')
 def ayear():
@@ -174,6 +240,6 @@ def res1():
 def helloworld():
     return "Hello World!" + getattr(g, 'str', '111')
 
-@app.route("/")
-def helloworld():
-    return "Hello Flask World!!!!!"
+# @app.route("/hello")
+# def helloworld():
+#     return "Hello Flask World!!!!!"

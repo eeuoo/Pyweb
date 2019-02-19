@@ -1,4 +1,4 @@
-from helloflask.utils.views import app
+from helloflask.views import app
 from datetime import datetime, date
 
 

@@ -85,44 +85,22 @@
                 <th scope="col">좋아요</th>
               </tr>
             </thead>
+            {% for info in mellist %}
             <tbody>
               <tr>
-                <th scope="row">1위</th>
+                <th scope="row">{{info.rank}}</th>
                 <td>
                   <img src="../static/img/melon_img3.png" style="width:3.5rem;" ></img>
                 </td>
-                <td>벌써 12시</td>
-                <td class="grey-text">청하</td>
+                <td>{{info.title}}</td>
+                <td class="grey-text">{{info.singer}}</td>
                 <td class="grey-text">
                   <i class="far fa-heart"></i>
-                  213493
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">2위</th>
-                <td>
-                  <img src="../static/img/melon_img1.png" style="width:3.5rem;" ></img>
-                </td>
-                <td>초록빛</td>
-                <td class="grey-text">폴킴</td>
-                <td class="grey-text">
-                  <i class="far fa-heart"></i>
-                  11234
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">3위</th>
-                <td>
-                  <img src="../static/img/melon_img5.png" style="width:3.5rem;" ></img>
-                </td>
-                <td >띵</td>
-                <td class="grey-text">Jvcki Wai, 영비 (Young B), Osshun Gum, 한요한</td>
-                <td class="grey-text">
-                  <i class="far fa-heart"></i>
-                  34555
+                  {{info.likecnt}}
                 </td>
               </tr>
             </tbody>
+            {% endfor %}
           </table>
 
 

@@ -1,39 +1,54 @@
-from flask import Flask
-from flask import url_for, render_template
+from flask import Flask, url_for, render_template, request, Response, session, jsonify, make_response, redirect
 from datetime import timedelta, date, datetime
 from helloflask.classes import Options, FormInput, Navi, Months
 from helloflask import app
 from helloflask.init_db import db_session
-from helloflask.models import User
-
-app = Flask("helloflask")     # __name__ : 파이썬이 실행될 때 __main__. module의 이름이 들어가야함.
+from helloflask.models import Singer, AlbumInfo, SongInfo, DailyList, MappingSS, User
+from sqlalchemy.exc import SQLAlchemyError
+from collections import namedtuple
+from sqlalchemy.orm import subqueryload, joinedload
 
 
 @app.route('/')
-def idx():
-    try:
-        # u = User('abc@efg.com', 'hong')
-        # db_session.add(u)
-        u = User.query.filter(User.id == 10).first()
-        print("user.id=", u.id)
-        db_session.delete(u)
-        # u.email = 'indiflex1@gmail.com'
-        # db_session.add(u)
+def main():
+    date = '2019-01-25 14:45:51'
+    mellist  = DailyList.query.filter_by(crawl_date = date).options(joinedload(DailyList.song))
+    mellist = mellist.options(joinedload(DailyList.album))
+    
+    return render_template('meltop100.html', mellist=mellist)
 
-        db_session.commit()
+@app.route('/songinfo')
+def song():
+    return
 
-        ret = "aaa"
-        # ret = User.query.all()
-        ret = User.query.filter(User.id > 5)
-        for user in ret:   # select * from Follower where user = 6
-            user.followers = Follower.query.filter(user == user.id)
-        
-    except SQLAlchemyError as sqlerr:
-        db_session.rollback()
-        print("SqlError>>", sqlerr)
+@app.route('/albuminfo')
+def album():
+    return
 
-    except:
-        print("Error!!")
+@app.route('/mypage')
+def mypage():
+    return
 
-    # return "RET=" + str(ret)
-    return render_template('main.html', userlist=ret)
+@app.route('/login', methods=['GET'])
+def login_get():
+    return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login_post():
+    email = request.form.get('email')
+    passwd =  request.form.get('passwd')
+    u = User.query.filter('email= :email and passwd = sha(:passwd, 256)').params(email=email, passwd=passwd).first()
+
+    if u is not None:
+        session['loginUserId'] = u.id
+        session['loginUserName'] = u.nickname
+        return redirect('/')
+    else : 
+        return render_template('login.html', email=email)
+
+@app.route('/logout')
+def logout():
+    if session.get('loginUserId'):
+        del session['loginUserId']
+        del session['loginUserName']
+    return redirect('/') 

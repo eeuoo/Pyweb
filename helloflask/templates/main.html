@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block section %}
+<div>
+  {{ super()}}
+  aaaaaaaaaaaa
+  <div>
+    <ul>
+      {% for r in ret %}
+        <li> {{r.song_id}}.{{r.title}} ({{r.genre}}) </li> 
+      {% else %}
+        <li> There is no ret. </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</div>
+
+{% endblock %}
+  

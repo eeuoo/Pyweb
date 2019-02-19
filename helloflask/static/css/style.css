@@ -8,16 +8,16 @@ body {
   margin-top: 60px;
 }
 
-tr > :nth-child(6) {
+/* tr > :nth-child(6) {
   color: blue;
 }
 
 tr > :last-child {
   color: red;
-}
+} */
 
 table > thead {
-  background-color: rgba(145, 36, 240, 0.3);
+  background-color: rgba(194, 242, 117, 0.851);
   opacity:0.6;
 }
 
