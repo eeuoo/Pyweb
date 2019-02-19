@@ -83,6 +83,7 @@
                 <th scope="col">곡</th>
                 <th scope="col">가수</th>
                 <th scope="col">좋아요</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             {% for info in mellist %}
@@ -90,7 +91,7 @@
               <tr>
                 <th scope="row">{{info.rank}}</th>
                 <td>
-                  <img src="../static/img/melon_img3.png" style="width:3.5rem;" ></img>
+                  <img src="../static/img/melon_img{{info.rank}}.png" style="width:3.5rem;" ></img>
                 </td>
                 <td>{{info.title}}</td>
                 <td class="grey-text">{{info.singer}}</td>
@@ -98,8 +99,20 @@
                   <i class="far fa-heart"></i>
                   {{info.likecnt}}
                 </td>
+                <td><i class="fas fa-plus text-muted"></i>
+                </td>
               </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td><i class="fas fa-compact-disc text-muted"></i> {{info.album.album_name}}</td>
+                <td>{{info.singer}}</td>
+                <td></td>
+                <td></td>
+              <tr>
+              
             </tbody>
+
             {% endfor %}
           </table>
 
