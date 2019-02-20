@@ -88,7 +88,8 @@
             </thead>
             {% for info in mellist %}
             <tbody>
-              <tr>
+              <!--곡-->
+              <tr href="#" onclick="openSongInfo('{{info.song_id}}')"> 
                 <th scope="row">{{info.rank}}</th>
                 <td>
                   <img src="../static/img/melon_img{{info.rank}}.png" style="width:3.5rem;" ></img>
@@ -102,15 +103,11 @@
                 <td><i class="fas fa-plus text-muted"></i>
                 </td>
               </tr>
-              <tr>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-compact-disc text-muted"></i> {{info.album.album_name}}</td>
-                <td>{{info.singer}}</td>
-                <td></td>
-                <td></td>
-              <tr>
-              
+              <!--곡 상세 정보-->
+              <tr id="{{info.song_id}}" class="songinfo" style="display:none;"> 
+
+              </tr>
+
             </tbody>
 
             {% endfor %}
@@ -126,5 +123,22 @@
     </div>
   </main>
   <!--Main layout-->
+
+  <script>
+
+    function openSongInfo(song_id) {
+      var url = "/songinfo/" + song_id
+      console.log("url>>", url)
+      // url, method, data, dataType, fn
+      var $songinfo = $('#' + song_id);
+
+      send_ajax(url, 'GET', '', '', function(res) {
+          console.log("res>>", res)
+          $songinfo.html(res);
+          $songinfo.css('display', '');
+          
+      });
+    }
+  </script>
 
 {% endblock main %}

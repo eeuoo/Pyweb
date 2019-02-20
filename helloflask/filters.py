@@ -4,6 +4,18 @@ from datetime import datetime, date
 
 # fiters
 
+@app.template_filter('date')
+def artist_names(likecnt):
+    
+    return 
+
+@app.template_filter('ymd2')               
+def datetime_ymd(dt, fmt='%Y%m%d'):
+    dt = dt.strptime(fmt)
+    dt = dt.strftime(dt, '%Y-%m-%d')
+    return dt
+    
+
 @app.template_filter('ymd')               
 def datetime_ymd(dt, fmt='%m-%d'):
     if isinstance(dt, date):

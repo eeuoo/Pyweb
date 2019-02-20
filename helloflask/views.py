@@ -14,16 +14,18 @@ def main():
     date = '2019-01-25 14:45:51'
     mellist  = DailyList.query.filter_by(crawl_date = date).options(joinedload(DailyList.song))
     mellist = mellist.options(joinedload(DailyList.album))
-    
+    # ORM : DailyList - SongInfo - AlbumInfo 
     return render_template('meltop100.html', mellist=mellist)
 
-@app.route('/songinfo')
-def song():
-    return
 
-@app.route('/albuminfo')
-def album():
-    return
+@app.route('/songinfo/<song_id>')
+def songinfo(song_id):
+    
+    song = SongInfo.query.filter_by(song_id = song_id).options(joinedload(SongInfo.album)).first()
+    
+ 
+    return render_template("songinfo.html", song=song)
+
 
 @app.route('/mypage')
 def mypage():

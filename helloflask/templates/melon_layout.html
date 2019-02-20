@@ -29,6 +29,7 @@
     }
 
   </style>
+
 </head>
 
 <body>
@@ -149,6 +150,24 @@
   <script type="text/javascript">
     // Animations initialization
     new WOW().init();
+
+    
+
+    function send_ajax(url, method, data, dataType, fn) {
+      $.ajax({
+          url: url,
+          data: data,
+          type: method,
+          dataType: dataType
+      }).done(function (res) {
+          if (fn)
+            fn(res)
+      }).fail(function (xhr, status, errorThrown) {
+        console.error("Sorry, there was a problem!", xhr, status, errorThrown);
+      }).always(function (xhr, status) {
+        console.log("The request is complete!");
+      });
+    }
 
   </script>
 </body>
