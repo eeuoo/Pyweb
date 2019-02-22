@@ -14,7 +14,7 @@
     <ul class="list-group list-group-flush">
     <li class="list-group-item"><strong>노래 장르 :</strong> {{song.genre}}</li>
     <li class="list-group-item"><strong>가수 :</strong> {{song.singer}}</li>
-    <li class="list-group-item"><strong>발매일 : </strong>{{song.release_date}}</li>
+    <li class="list-group-item"><strong>발매일 : </strong>{{song.release_date | ymd2 }}</li>
     </ul>
 </td>
 <td></td>
